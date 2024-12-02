@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class QFileDialog;
+
 namespace Ui {
     class Main_Window;
 }
@@ -16,6 +18,12 @@ public:
 
 private:
     Ui::Main_Window *ui;
+
+    void set_connects();
+
+    QFileDialog *file_dialog;
+    QUrl get_url();
+    void update_central_widget(const QUrl &url);
 
 };
 
