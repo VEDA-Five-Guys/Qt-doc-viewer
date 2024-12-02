@@ -1,8 +1,11 @@
 #include "ui_main_window.h"
 #include "main_window.h"
 
+#include "pdf_viewer_widget.h"
+
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QStackedLayout>
 
 using namespace std;
 
@@ -57,6 +60,22 @@ void Main_Window::update_central_widget(const QUrl &url){
              * object_name 설정
              * page, button 생성 및 object_name과 해시로 연결
              */
+
+            // 1. doc_viewer 생성
+            Pdf_Viewer_Widget *pdf_viewer_widget = new Pdf_Viewer_Widget(url, this);
+            // 2. doc_viewer connect 설정
+
+            // 3. object_name 설정
+
+            // 4. doc_viewer와 대응되는 page, button 생성 및 object_name과 해시 연결
+            QWidget *tmp_widget = make_page(pdf_viewer_widget, "");
+            if(tmp_widget){
+                qDebug() << "success!";
+            }
+            else{
+                qDebug() << "failed...";
+            }
+            // 5. page 변경 신호 발생
         }
         else{
             qDebug() << "it's not local file";
@@ -67,3 +86,19 @@ void Main_Window::update_central_widget(const QUrl &url){
     }
 }
 
+QWidget *Main_Window::make_page(Pdf_Viewer_Widget *pdf_viewer_widget, const QString &name){
+    QWidget *page = new QWidget(ui->file_view);
+    page->setObjectName(name);
+
+    QStackedLayout *stacked_layout = new QStackedLayout(page);
+    stacked_layout->setContentsMargins(0, 0, 0, 0);
+    stacked_layout->setStackingMode(QStackedLayout::StackAll);
+    stacked_layout->addWidget(pdf_viewer_widget);
+
+    page->setLayout(stacked_layout);
+
+    ui->file_view->addWidget(page);
+    ui->file_view->setCurrentWidget(page);
+
+    return page;
+}

@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class Pdf_Viewer_Widget;
+
 class QFileDialog;
 
 namespace Ui {
@@ -24,6 +26,7 @@ private:
     QFileDialog *file_dialog;
     QUrl get_url();
     void update_central_widget(const QUrl &url);
+    QWidget *make_page(Pdf_Viewer_Widget *pdf_viewer_widget, const QString &name);
 
 };
 
