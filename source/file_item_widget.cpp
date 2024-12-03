@@ -56,16 +56,16 @@ void File_Item_Widget::set_connects(const QString &name){
 
     });
     connect(ui->remove, &QPushButton::clicked, this, [this, name, width_changed_connection](){
+        emit remove(name);
+        removeEventFilter(this);
         disconnect(width_changed_connection);
         disconnect();
-        removeEventFilter(this);
-        emit remove(name);
     });
 
 }
 
 void File_Item_Widget::set_elided_text(const QString &name){
     int width = ui->file->width();
-    QString elided_name = ui->file->fontMetrics().elidedText(name, Qt::ElideRight, width);
+    QString elided_name = ui->file->fontMetrics().elidedText(name, Qt::ElideRight, width - 5);
     ui->file->setText(elided_name);
 }
