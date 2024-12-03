@@ -55,7 +55,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>147</width>
+         <width>145</width>
          <height>559</height>
         </rect>
        </property>
@@ -129,6 +129,17 @@
      <height>21</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QToolBar" name="navigator">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>RightToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
  </widget>
  <resources/>

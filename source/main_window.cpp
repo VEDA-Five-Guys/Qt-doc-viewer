@@ -105,8 +105,6 @@ File_Item_Widget *Main_Window::make_item(const QString &name){
     ui->contents->layout()->addWidget(file_item);
 
     connect(file_item, &File_Item_Widget::remove, this, [this](const QString &name){
-        qDebug() << name;
-
         QWidget *named_page = hash.value(name).first;
         if(named_page){
             ui->file_view->removeWidget(named_page);
@@ -118,6 +116,7 @@ File_Item_Widget *Main_Window::make_item(const QString &name){
             qDebug() << "named_page is null or invalid";
             return;
         }
+
         File_Item_Widget *named_file_item = hash.value(name).second;
         if(named_file_item){
             ui->contents->layout()->removeWidget(named_file_item);
@@ -127,7 +126,6 @@ File_Item_Widget *Main_Window::make_item(const QString &name){
             qDebug() << "named_file_item is null or invalid";
             return;
         }
-
     });
 
     return file_item;
