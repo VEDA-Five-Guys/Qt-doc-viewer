@@ -14,6 +14,10 @@ Main_Window::Main_Window(QWidget *parent)
     , dialog(nullptr){
 
     ui->setupUi(this);
+
+    toolbar = new ToolBar();
+    toolbar->setup(ui->navigator);
+
     initialize();
     set_connects();
 }

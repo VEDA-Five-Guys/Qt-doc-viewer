@@ -21,13 +21,14 @@ set(HEADERS
     include/main_window.h
     include/pdf_viewer_widget.h
     include/file_item_widget.h
-
+    include/toolbar.h
 )
 
 set(SOURCES
     source/main_window.cpp
     source/pdf_viewer_widget.cpp
     source/file_item_widget.cpp
+    source/toolbar.cpp
 )
 
 set(UI

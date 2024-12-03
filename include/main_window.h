@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QHash>
 
+#include "toolbar.h"
+
 class Pdf_Viewer_Widget;
 class File_Item_Widget;
 
@@ -23,6 +25,7 @@ public:
 private:
     Ui::Main_Window *ui;
     QFileDialog *dialog;
+    ToolBar *toolbar;
 
     void initialize();
     void set_connects();
