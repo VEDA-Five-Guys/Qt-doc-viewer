@@ -8,26 +8,26 @@
 
 Pdf_Viewer_Widget::Pdf_Viewer_Widget(const QUrl &url, QWidget *parent)
     : QWidget{parent}
-    , pdf_view(new QPdfView(this)), pdf_document(new QPdfDocument(this)), pdf_page_navigator(new QPdfPageNavigator(this)){
+    , view(new QPdfView(this)), document(new QPdfDocument(this)), page_navigator(new QPdfPageNavigator(this)){
 
     initialize(url);
 }
 
 void Pdf_Viewer_Widget::initialize(const QUrl &url){
-    QVBoxLayout *vertical_layout = new QVBoxLayout(this);
-    vertical_layout->setContentsMargins(0, 0, 0, 0);
-    vertical_layout->addWidget(pdf_view);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(view);
 
-    pdf_view->setPageMode(QPdfView::PageMode::MultiPage);
-    pdf_view->setZoomMode(QPdfView::ZoomMode::FitInView);
-    pdf_view->setDocumentMargins(QMargins(0, 0, 0, 0));
-    pdf_view->setDocument(pdf_document);
+    view->setPageMode(QPdfView::PageMode::MultiPage);
+    view->setZoomMode(QPdfView::ZoomMode::FitInView);
+    view->setDocumentMargins(QMargins(0, 0, 0, 0));
+    view->setDocument(document);
 
-    pdf_document->load(url.toLocalFile());
+    document->load(url.toLocalFile());
 
-    pdf_page_navigator = pdf_view->pageNavigator();
-    curr_page_idx = pdf_page_navigator->currentPage();
-    pdf_page_navigator->jump(curr_page_idx, {}, pdf_page_navigator->currentZoom());
+    page_navigator = view->pageNavigator();
+    curr_page_idx = page_navigator->currentPage();
+    page_navigator->jump(curr_page_idx, {}, page_navigator->currentZoom());
 
-    setLayout(vertical_layout);
+    setLayout(layout);
 }

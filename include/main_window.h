@@ -2,8 +2,10 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include <QHash>
 
 class Pdf_Viewer_Widget;
+class File_Item_Widget;
 
 class QFileDialog;
 
@@ -20,13 +22,16 @@ public:
 
 private:
     Ui::Main_Window *ui;
+    QFileDialog *dialog;
 
+    void initialize();
     void set_connects();
-
-    QFileDialog *file_dialog;
     QUrl get_url();
     void update_central_widget(const QUrl &url);
-    QWidget *make_page(Pdf_Viewer_Widget *pdf_viewer_widget, const QString &name);
+    QWidget *make_page(Pdf_Viewer_Widget *pdf_viewer, const QString &name);
+    File_Item_Widget *make_item(const QString &name);
+
+    QHash<QString, QPair<QWidget*, File_Item_Widget*>> hash;
 
 };
 

@@ -20,16 +20,19 @@ include_directories(
 set(HEADERS
     include/main_window.h
     include/pdf_viewer_widget.h
+    include/file_item_widget.h
 
 )
 
 set(SOURCES
     source/main_window.cpp
     source/pdf_viewer_widget.cpp
+    source/file_item_widget.cpp
 )
 
 set(UI
     ui/main_window.ui
+    ui/file_item_widget.ui
 )
 
 qt_add_executable(Qt-doc-viewer
