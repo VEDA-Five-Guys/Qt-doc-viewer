@@ -21,12 +21,14 @@ set(HEADERS
     include/main_window.h
     include/toolbar.h
     include/file_item.h
+    include/file_manager.h
 )
 
 set(SOURCES
     source/main_window.cpp
     source/toolbar.cpp
     source/file_item.cpp
+    source/file_manager.cpp
 )
 
 set(UI
