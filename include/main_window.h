@@ -1,23 +1,44 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include "toolbar.h"
+
 #include <QMainWindow>
+#include <QHash>
+
+class Pdf_Viewer_Widget;
+class File_Item_Widget;
+
+class QFileDialog;
+
+class QFileDialog;
+class FileManager;
 
 namespace Ui {
-    class Main_Window;
+    class MainWindow;
 }
 
-class Main_Window : public QMainWindow {
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit Main_Window(QWidget *parent = nullptr);
-    ~Main_Window();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
+public slots:
+    void update_cur_page(int);
+    void update_total_page(int);
+
+    void move_prev();
+    void move_next();
+    
 private:
-    Ui::Main_Window *ui;
+    Ui::MainWindow *ui;
+    QFileDialog *dialog;
+    ToolBar *toolbar;
+    FileManager *file_manager;
 
+    QUrl get_url();
 };
 
-
-#endif
+#endif // MAIN_WINDOW_H
