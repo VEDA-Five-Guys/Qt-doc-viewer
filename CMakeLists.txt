@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets PdfWidgets)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/ui")
 
@@ -22,6 +22,7 @@ set(HEADERS
     include/toolbar.h
     include/file_item.h
     include/file_manager.h
+    include/viewer.h
 )
 
 set(SOURCES
@@ -29,6 +30,7 @@ set(SOURCES
     source/toolbar.cpp
     source/file_item.cpp
     source/file_manager.cpp
+    source/viewer.cpp
 )
 
 set(UI
@@ -48,4 +50,5 @@ target_link_libraries(Qt-doc-viewer
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt::PdfWidgets
 )

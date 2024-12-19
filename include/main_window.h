@@ -5,6 +5,9 @@
 
 #include <QMainWindow>
 
+class QFileDialog;
+class FileManager;
+
 namespace Ui {
     class MainWindow;
 }
@@ -17,14 +20,19 @@ public:
     ~MainWindow();
 
 public slots:
+    void update_cur_page(int);
+    void update_total_page(int);
+
     void move_prev();
     void move_next();
-
+    
 private:
     Ui::MainWindow *ui;
+    QFileDialog *dialog;
     ToolBar *toolbar;
+    FileManager *file_manager;
 
+    QUrl get_url();
 };
 
-
-#endif
+#endif // MAIN_WINDOW_H
