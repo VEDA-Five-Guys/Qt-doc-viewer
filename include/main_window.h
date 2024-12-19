@@ -1,6 +1,8 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include "toolbar.h"
+
 #include <QMainWindow>
 
 namespace Ui {
@@ -16,6 +18,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ToolBar *toolbar;
 
 };
 
