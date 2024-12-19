@@ -1,6 +1,8 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include "toolbar.h"
+
 #include <QMainWindow>
 #include <QHash>
 
@@ -9,31 +11,34 @@ class File_Item_Widget;
 
 class QFileDialog;
 
+class QFileDialog;
+class FileManager;
+
 namespace Ui {
-    class Main_Window;
+    class MainWindow;
 }
 
-class Main_Window : public QMainWindow {
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit Main_Window(QWidget *parent = nullptr);
-    ~Main_Window();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
+public slots:
+    void update_cur_page(int);
+    void update_total_page(int);
+
+    void move_prev();
+    void move_next();
+    
 private:
-    Ui::Main_Window *ui;
+    Ui::MainWindow *ui;
     QFileDialog *dialog;
+    ToolBar *toolbar;
+    FileManager *file_manager;
 
-    void initialize();
-    void set_connects();
     QUrl get_url();
-    void update_central_widget(const QUrl &url);
-    QWidget *make_page(Pdf_Viewer_Widget *pdf_viewer, const QString &name);
-    File_Item_Widget *make_item(const QString &name);
-
-    QHash<QString, QPair<QWidget*, File_Item_Widget*>> hash;
-
 };
 
-
-#endif
+#endif // MAIN_WINDOW_H

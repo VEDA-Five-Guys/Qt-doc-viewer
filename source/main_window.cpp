@@ -1,132 +1,70 @@
 #include "ui_main_window.h"
 #include "main_window.h"
-
-#include "pdf_viewer_widget.h"
-#include "file_item_widget.h"
+#include "file_manager.h"
 
 #include <QFileDialog>
 #include <QStandardPaths>
-#include <QStackedLayout>
 
-Main_Window::Main_Window(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::Main_Window)
-    , dialog(nullptr){
-
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), 
+    ui(new Ui::MainWindow), 
+    toolbar(new ToolBar),
+    dialog(nullptr) {
     ui->setupUi(this);
-    initialize();
-    set_connects();
-}
 
-Main_Window::~Main_Window(){
-    delete ui;
-}
+    file_manager = new FileManager(ui->contents, ui->file_view, this);
 
-void Main_Window::initialize(){
-    ui->contents->layout()->setAlignment(Qt::AlignTop); // file_list 내 버튼 정렬 설정
-}
+    toolbar->setup(ui->navigator);
 
-void Main_Window::set_connects(){
-    connect(ui->open_file, &QPushButton::clicked, this, [this](){
-        update_central_widget(get_url());
+    ui->contents->layout()->setAlignment(Qt::AlignTop);
+
+    connect(ui->open_file, &QPushButton::clicked, this, [this]() {
+        QUrl url = get_url();
+        file_manager->add_file(url);
     });
+
+    connect(file_manager, &FileManager::cur_page_changed, this, &MainWindow::update_cur_page);
+    connect(file_manager, &FileManager::total_page_changed, this, &MainWindow::update_total_page);
+
+    connect(toolbar->prev_page, &QAction::triggered, this, &MainWindow::move_prev);
+    connect(toolbar->next_page, &QAction::triggered, this, &MainWindow::move_next);
 }
 
-QUrl Main_Window::get_url(){
-    if(dialog == nullptr){
-        dialog = new QFileDialog(this, tr("Open File")
-                                      , QStandardPaths::writableLocation(QStandardPaths::DownloadLocation)); // 경로 설정
-        dialog->setAcceptMode(QFileDialog::AcceptOpen);    // 열기 모드
-        dialog->setMimeTypeFilters({"application/pdf"});   // pdf 문서만 표시
+MainWindow::~MainWindow() {}
 
-        QUrl url;
-        if(dialog->exec() == QFileDialog::Accepted){
-            url = dialog->selectedUrls().constFirst();
-        }
-        dialog->deleteLater();
-        dialog = nullptr;
+void MainWindow::update_cur_page(int cur) {
+    toolbar->current_page->setText(QString::number(cur));
+}
 
-        return url;
-    }
-    else{
-        qDebug() << "dialog already open";
+void MainWindow::update_total_page(int total) {
+    toolbar->total_page->setText(QString::number(total));
+}
+
+void MainWindow::move_prev() {
+    file_manager->prev_page();
+}
+
+void MainWindow::move_next() {
+    file_manager->next_page();
+}
+
+QUrl MainWindow::get_url() {
+    if (dialog) {
+        qDebug() << "Dialog already open";
         return QUrl();
     }
-}
 
-void Main_Window::update_central_widget(const QUrl &url){
-    if(url.isValid()){
-        if(url.isLocalFile()){
-            // 1. pdf_viewer 동적 생성
-            Pdf_Viewer_Widget *pdf_viewer = new Pdf_Viewer_Widget(url, this);
-            // 2. doc_viewer connect 설정
+    dialog = new QFileDialog(this, tr("Open File"), QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
+    dialog->setAcceptMode(QFileDialog::AcceptOpen);
+    dialog->setMimeTypeFilters({"application/pdf"});
 
-            // 3. name 설정
-            int num = 1;
-            QString original_name = url.fileName().remove(".pdf");
-            QString name = original_name;
-            while(hash.contains(name)){
-                name = QString("%1(%2)").arg(original_name, QString::number(num++));
-            }
-            // 4. page, item 생성 및 해시 연결
-            hash.insert(name, {make_page(pdf_viewer, name), make_item(name)});
-            // 5. page 변경 시그널 전송
-        }
-        else{
-            qDebug() << "it's not local file";
-        }
+    QUrl url;
+    if (dialog->exec() == QFileDialog::Accepted) {
+        url = dialog->selectedUrls().constFirst();
     }
-    else{
-        qDebug() << "url is invalid";
-    }
-}
 
-QWidget *Main_Window::make_page(Pdf_Viewer_Widget *pdf_viewer, const QString &name){
-    QWidget *page = new QWidget(ui->file_view);
-    page->setObjectName(QString("%1_%2").arg(name, "page"));
+    dialog->deleteLater();
+    dialog = nullptr;
 
-    QStackedLayout *stacked_layout = new QStackedLayout(page);
-    stacked_layout->setContentsMargins(0, 0, 0, 0);
-    stacked_layout->setStackingMode(QStackedLayout::StackAll);
-    stacked_layout->addWidget(pdf_viewer);
-
-    page->setLayout(stacked_layout);
-
-    ui->file_view->addWidget(page);
-    ui->file_view->setCurrentWidget(page);
-
-    return page;
-}
-
-File_Item_Widget *Main_Window::make_item(const QString &name){
-    File_Item_Widget *file_item = new File_Item_Widget(name, ui->file_list);
-    file_item->setObjectName(QString("%1_%2").arg(name, "item"));
-
-    ui->contents->layout()->addWidget(file_item);
-
-    connect(file_item, &File_Item_Widget::remove, this, [this](const QString &name){
-        QWidget *named_page = hash.value(name).first;
-        if(named_page){
-            ui->file_view->removeWidget(named_page);
-            named_page->deleteLater();
-
-            qDebug() << ui->file_view->currentWidget()->objectName();
-        }
-        else{
-            qDebug() << "named_page is null or invalid";
-            return;
-        }
-
-        File_Item_Widget *named_file_item = hash.value(name).second;
-        if(named_file_item){
-            ui->contents->layout()->removeWidget(named_file_item);
-            named_file_item->deleteLater();
-        }
-        else{
-            qDebug() << "named_file_item is null or invalid";
-            return;
-        }
-    });
-
-    return file_item;
+    return url;
 }
