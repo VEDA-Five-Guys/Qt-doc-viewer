@@ -16,6 +16,10 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void move_prev();
+    void move_next();
+
 private:
     Ui::MainWindow *ui;
     ToolBar *toolbar;

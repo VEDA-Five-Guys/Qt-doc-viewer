@@ -20,11 +20,13 @@ include_directories(
 set(HEADERS
     include/main_window.h
     include/toolbar.h
+    include/file_item.h
 )
 
 set(SOURCES
     source/main_window.cpp
     source/toolbar.cpp
+    source/file_item.cpp
 )
 
 set(UI
