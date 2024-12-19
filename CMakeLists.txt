@@ -26,7 +26,8 @@ set(SOURCES
 )
 
 set(UI
-    ui/Main_Window.ui
+    ui/main_window.ui
+    ui/file_item.ui
 )
 
 qt_add_executable(Qt-doc-viewer

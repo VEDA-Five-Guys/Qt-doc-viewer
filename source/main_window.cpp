@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Main_Window::Main_Window(QWidget *parent) 
-    : QMainWindow(parent), ui(new Ui::Main_Window) {
+MainWindow::MainWindow(QWidget *parent) 
+    : QMainWindow(parent), ui(new Ui::MainWindow) {
 
     ui->setupUi(this);
 }
 
-Main_Window::~Main_Window() {
+MainWindow::~MainWindow() {
     delete ui;
 }
