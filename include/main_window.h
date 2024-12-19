@@ -4,6 +4,12 @@
 #include "toolbar.h"
 
 #include <QMainWindow>
+#include <QHash>
+
+class Pdf_Viewer_Widget;
+class File_Item_Widget;
+
+class QFileDialog;
 
 class QFileDialog;
 class FileManager;
